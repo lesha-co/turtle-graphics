@@ -1,19 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turtle Graphics</title>
-    <style>
-        canvas {
-            border: 1px solid #000;
-            display: block;
-            margin: 20px auto;
-        }
-    </style>
-</head>
-<body>
-    <canvas width="800" height="600"></canvas>
-    <script type="module" src="script.js"></script>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Turtle Graphics</title>
+        <style>
+            #canvasholder {
+                border: 1px solid #000;
+                width: 800px;
+                height: 600px;
+                position: relative;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="canvasholder">
+            <canvas width="800" height="600"></canvas>
+        </div>
+        <script type="module" src="dragon.js"></script>
+    </body>
 </html>

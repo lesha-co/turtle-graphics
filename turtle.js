@@ -1,24 +1,74 @@
-export class Turtle {
-  positionX = 0;
-  positionY = 0;
-  angle = -90;
+class Turtle {
+  constructor(emoji = "🐢", x, y, angle, speed, enable, canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
+    this.positionX = x;
+    this.positionY = y;
+    this.angle = angle;
+    this.speed = speed;
+    this.emoji = emoji;
 
-  constructor(selector) {
-    this.turtlespan = document.createElement("span");
-    this.turtlespan.innerText = "🐢";
+    if (enable) {
+      this.show();
+    }
 
-    this.canvas = document.querySelector(selector);
-    this.ctx = this.canvas.getContext("2d");
-    this.positionX = this.canvas.offsetWidth / 2;
-    this.positionY = this.canvas.offsetHeight / 2;
+    this.updateTurtlePosition();
+  }
+  setSpeed(speed) {
+    this.speed = speed;
+  }
+  updateTurtlePosition() {
+    if (!this.turtlespan) return;
+
+    const turtleSize = 20; // Approximate size of the turtle emoji
+    this.turtlespan.style.left = this.positionX - turtleSize / 2 + "px";
+    this.turtlespan.style.top = this.positionY - turtleSize / 2 + "px";
+    this.turtlespan.style.transform = `rotate(${180 + Math.round(this.angle)}deg)`;
+    if (this.speed > 10) {
+      this.turtlespan.style.transition = undefined;
+    } else {
+      this.turtlespan.style.transition =
+        "left 0.1s ease, top 0.1s ease, transform 0.1s ease";
+    }
   }
 
   teleport(x, y) {
     this.positionX = x;
     this.positionY = y;
+    this.updateTurtlePosition();
+  }
+  jump(x, y) {
+    this.positionX += x;
+    this.positionY += y;
+    this.updateTurtlePosition();
+  }
+  clone() {
+    return new Turtle(
+      this.emoji,
+      this.positionX,
+      this.positionY,
+      this.angle,
+      this.speed,
+      !!this.turtlespan,
+      this.canvas,
+    );
   }
 
-  draw(distance) {
+  hide() {
+    this.turtlespan.parentElement.removeChild(this.turtlespan);
+    this.turtlespan = null;
+  }
+
+  show() {
+    this.turtlespan = document.createElement("span");
+    this.turtlespan.innerText = this.emoji;
+    this.turtlespan.style.position = "absolute";
+    this.turtlespan.style.pointerEvents = "none";
+
+    this.canvas.parentElement.appendChild(this.turtlespan);
+  }
+
+  async draw(distance) {
     const radians = (this.angle * Math.PI) / 180;
     const endX = this.positionX + distance * Math.cos(radians);
     const endY = this.positionY + distance * Math.sin(radians);
@@ -30,20 +80,55 @@ export class Turtle {
 
     this.positionX = endX;
     this.positionY = endY;
-  }
-
-  rotate(degrees) {
-    this.angle = (this.angle + degrees) % 360;
-    if (this.angle < 0) {
-      this.angle += 360;
+    this.updateTurtlePosition();
+    if (this.speed < 1000) {
+      await this.sleep(1 / this.speed);
     }
   }
 
+  rotate(degrees) {
+    this.angle = this.angle + degrees;
+    this.updateTurtlePosition();
+  }
+  setHeading(degrees) {
+    this.angle = degrees;
+    this.updateTurtlePosition();
+  }
+
   setColor(color) {
-    this.ctx.strokeStyle = this.color;
+    this.ctx.strokeStyle = color;
   }
 
   setWidth(width) {
-    this.ctx.lineWidth = this.lineWidth;
+    this.ctx.lineWidth = width;
+  }
+  sleep(seconds = 1) {
+    const p = Promise.withResolvers();
+    setTimeout(p.resolve, seconds * 1000);
+    return p.promise;
+  }
+}
+
+export class TurtleManager {
+  constructor(selector) {
+    this.canvas = document.querySelector(selector);
+    this.canvasHolder = this.canvas.parentElement;
+
+    const dpr = 5;
+    const { width, height } = this.canvas.getBoundingClientRect();
+    this.width = width;
+    this.height = height;
+    this.canvas.width = width * dpr;
+    this.canvas.height = height * dpr;
+    this.canvas.style.width = `${width}px`;
+    this.canvas.style.height = `${height}px`;
+    this.ctx = this.canvas.getContext("2d");
+    this.ctx.scale(dpr, dpr);
+  }
+
+  spawn(x, y) {
+    x ??= this.width / 2;
+    y ??= this.height / 2;
+    return new Turtle("🐢", x, y, -90, 1, true, this.canvas);
   }
 }
