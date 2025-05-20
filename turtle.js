@@ -114,7 +114,7 @@ export class TurtleManager {
     this.canvas = document.querySelector(selector);
     this.canvasHolder = this.canvas.parentElement;
 
-    const dpr = 5;
+    const dpr = 6;
     const { width, height } = this.canvas.getBoundingClientRect();
     this.width = width;
     this.height = height;

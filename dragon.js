@@ -28,11 +28,14 @@ function inverse(instructions) {
 /**
  * Draw the dragon curve
  */
+const drawDistance = 3;
+let draws = 0;
 for (const instruction of nucleus) {
   switch (instruction) {
     case "d":
       await turtle.draw(drawDistance);
       turtle.setColor(`hsl(${draws % 360}, 100%, 50%)`);
+      draws++;
       break;
     case "r":
       turtle.rotate(90);
