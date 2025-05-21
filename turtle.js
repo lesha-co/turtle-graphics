@@ -121,27 +121,36 @@ class Turtle {
    *
    * @param {Record<string, (this)=>(Promise<void>|void)>} commands
    * @param {string} initiator
-   * @param {Record<string, string>} expansions
+   * @param {Record<string, string>} expansionRules
    * @param {number} iterations
    */
-  async L_System(initiator, expansions, iterations, commands) {
-    function step(list) {
-      const list2 = list.flatMap((instruction) => {
-        if (expansions[instruction]) {
-          return expansions[instruction].split("");
+  async L_System(initiator, expansionRules, iterations, commands) {
+    /**
+     *
+     * @param {string} iterable (list or generator) of instructions at current level
+     * @returns iterable
+     */
+    function* stepGenerator(list) {
+      // iterating over a list of instructions
+      for (let instruction of list) {
+        // if there is an expansion rule for current instruction
+        if (expansionRules[instruction]) {
+          // yield all instructions for that expansion rule
+          yield* expansionRules[instruction];
+        } else {
+          // otherwise yield the instruction itself — it does not expand
+          yield instruction;
         }
-        return instruction;
-      });
-      return list2;
+      }
     }
 
-    let instructions = initiator.split("");
-
+    // now we wrapping generator in itself several times
+    let generator = initiator;
     for (let i = 0; i < iterations; i++) {
-      console.log(instructions.join(""));
-      instructions = step(instructions);
+      generator = stepGenerator(generator);
     }
-    for (const instruction of instructions) {
+
+    for (const instruction of generator) {
       if (!commands[instruction]) continue;
       await commands[instruction](this);
     }
