@@ -1,4 +1,5 @@
 class Turtle {
+  history = [];
   constructor(emoji = "🐢", x, y, angle, speed, enable, canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
@@ -31,7 +32,6 @@ class Turtle {
         "left 0.1s ease, top 0.1s ease, transform 0.1s ease";
     }
   }
-
   teleport(x, y) {
     this.positionX = x;
     this.positionY = y;
@@ -53,12 +53,10 @@ class Turtle {
       this.canvas,
     );
   }
-
   hide() {
     this.turtlespan.parentElement.removeChild(this.turtlespan);
     this.turtlespan = null;
   }
-
   show() {
     this.turtlespan = document.createElement("span");
     this.turtlespan.innerText = this.emoji;
@@ -68,6 +66,20 @@ class Turtle {
     this.canvas.parentElement.appendChild(this.turtlespan);
   }
 
+  remember() {
+    this.history.push({
+      positionX: this.positionX,
+      positionY: this.positionY,
+      angle: this.angle,
+    });
+  }
+  return() {
+    const { positionX, positionY, angle } = this.history.pop();
+    this.positionX = positionX;
+    this.positionY = positionY;
+    this.angle = angle;
+    this.updateTurtlePosition();
+  }
   async draw(distance) {
     const radians = (this.angle * Math.PI) / 180;
     const endX = this.positionX + distance * Math.cos(radians);
@@ -94,11 +106,9 @@ class Turtle {
     this.angle = degrees;
     this.updateTurtlePosition();
   }
-
   setColor(color) {
     this.ctx.strokeStyle = color;
   }
-
   setWidth(width) {
     this.ctx.lineWidth = width;
   }
@@ -106,6 +116,35 @@ class Turtle {
     const p = Promise.withResolvers();
     setTimeout(p.resolve, seconds * 1000);
     return p.promise;
+  }
+  /**
+   *
+   * @param {Record<string, (this)=>(Promise<void>|void)>} commands
+   * @param {string} initiator
+   * @param {Record<string, string>} expansions
+   * @param {number} iterations
+   */
+  async L_System(initiator, expansions, iterations, commands) {
+    function step(list) {
+      const list2 = list.flatMap((instruction) => {
+        if (expansions[instruction]) {
+          return expansions[instruction].split("");
+        }
+        return instruction;
+      });
+      return list2;
+    }
+
+    let instructions = initiator.split("");
+
+    for (let i = 0; i < iterations; i++) {
+      console.log(instructions.join(""));
+      instructions = step(instructions);
+    }
+    for (const instruction of instructions) {
+      if (!commands[instruction]) continue;
+      await commands[instruction](this);
+    }
   }
 }
 
@@ -130,5 +169,14 @@ export class TurtleManager {
     x ??= this.width / 2;
     y ??= this.height / 2;
     return new Turtle("🐢", x, y, -90, 1, true, this.canvas);
+  }
+  clear() {
+    const ctx = this.canvas.getContext("2d");
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+  sleep(seconds = 1) {
+    const p = Promise.withResolvers();
+    setTimeout(p.resolve, seconds * 1000);
+    return p.promise;
   }
 }

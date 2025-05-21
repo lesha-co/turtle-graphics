@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Turtle Graphics</title>
+        <style>
+            #canvasholder {
+                border: 1px solid #000;
+                width: 1600px;
+                height: 900px;
+                position: relative;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="canvasholder">
+            <canvas width="1600" height="900"></canvas>
+        </div>
+
+        <div style="display: flex">
+            <div style="margin: 20px">
+                <label
+                    >Angle (0-180):
+                    <input
+                        type="number"
+                        id="angle"
+                        min="0"
+                        max="180"
+                        value="90"
+                    />
+                </label>
+                <br /><br />
+                <label
+                    >Iterations (1-20):
+                    <input
+                        type="number"
+                        id="iterations"
+                        min="1"
+                        max="20"
+                        value="3"
+                    />
+                </label>
+                <br /><br />
+                <label
+                    >Axiom:
+                    <input type="text" id="axiom" value="F" />
+                </label>
+                <br /><br />
+                <button id="compute">Compute</button>
+            </div>
+            <div>
+                <p>Rewrite rules</p>
+                <textarea name="" id=""></textarea>
+            </div>
+        </div>
+
+        <script></script>
+    </body>
+</html>
