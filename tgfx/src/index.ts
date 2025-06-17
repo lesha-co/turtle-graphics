@@ -1,3 +1,5 @@
+import {lsys} from 'l-system'
+
 class Turtle {
   history: {
     positionX: number;
@@ -19,7 +21,7 @@ class Turtle {
     angle: number,
     speed: number,
     enable: boolean,
-    canvas: HTMLCanvasElement
+    canvas: HTMLCanvasElement,
   ) {
     this.canvas = canvas;
     const ctx = canvas.getContext("2d");
@@ -76,7 +78,7 @@ class Turtle {
       this.angle,
       this.speed,
       !!this.turtlespan,
-      this.canvas
+      this.canvas,
     );
   }
   hide() {
@@ -152,37 +154,11 @@ class Turtle {
     initiator: string,
     expansionRules: Record<string, string>,
     iterations: number,
-    commands: Record<string, (t: Turtle) => Promise<void> | void>
+    commands: Record<string, (t: Turtle) => Promise<void> | void>,
   ) {
-    /**
-     *
-     * @param {string} iterable (list or generator) of instructions at current level
-     * @returns iterable
-     */
-    function* stepGenerator(list: Iterable<string>) {
-      // iterating over a list of instructions
-      for (let instruction of list) {
-        // if there is an expansion rule for current instruction
-        if (expansionRules[instruction]) {
-          // yield all instructions for that expansion rule
-          yield* expansionRules[instruction];
-        } else {
-          // otherwise yield the instruction itself — it does not expand
-          yield instruction;
-        }
-      }
-    }
 
-    // now we wrapping generator in itself several times
-    let generator: Iterable<string> = initiator;
-    for (let i = 0; i < iterations; i++) {
-      generator = stepGenerator(generator);
-    }
-
-    for (const instruction of generator) {
-      if (!commands[instruction]) continue;
-      await commands[instruction](this);
-    }
+    for (const instruction of lsys(initiator, expansionRules, iterations))
+      await commands[instruction]?.(this);
   }
 }
 

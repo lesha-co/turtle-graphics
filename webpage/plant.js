@@ -1,4 +1,4 @@
-import { TurtleManager } from "./turtle.js";
+import { TurtleManager } from "tgfx";
 
 const turtleManager = new TurtleManager("canvas");
 const turtle = turtleManager.spawn(100, 800);
