@@ -1,4 +1,4 @@
-import {lsys} from 'l-system'
+import {lsys} from 'lsystem-generator'
 
 class Turtle {
   history: {

@@ -1,5 +1,5 @@
 export function lsys(
-  initiator: string,
+  initiator: Iterable<string>,
   rules: Record<string, string>,
   iterations: number,
 ): Iterable<string> {
@@ -18,7 +18,7 @@ export function lsys(
   }
 
   // now we wrapping generator in itself several times
-  let generator: Iterable<string> = initiator;
+  let generator = initiator;
   for (let i = 0; i < iterations; i++) {
     generator = stepGenerator(generator);
   }

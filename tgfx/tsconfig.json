@@ -8,6 +8,6 @@
     "./src/**/*.ts"
   ],
   "references": [
-    { "path": "../l-system" }
+    { "path": "../lsystem-generator" }
   ]
 }

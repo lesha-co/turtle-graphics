@@ -2,7 +2,7 @@
   "name": "turtle-monorepo",
   "private": true,
   "workspaces": [
-    "l-system",
+    "lsystem-generator",
     "tgfx"
   ],
   "devDependencies": {

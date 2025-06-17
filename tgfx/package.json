@@ -23,7 +23,7 @@
   "homepage": "https://github.com/lesha-co/turtle-graphics#readme",
   "description": "",
   "dependencies": {
-    "l-system": "*"
+    "lsystem-generator": "*"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

@@ -1,5 +1,5 @@
 {
-  "name": "l-system",
+  "name": "lsystem-generator",
   "version": "1.0.0",
   "description": "a library that lets you create l-system expansions",
   "main": "./dist/index.js",
