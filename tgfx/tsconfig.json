@@ -2,12 +2,8 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./dist"
   },
-  "include": [
-    "./src/**/*.ts"
-  ],
-  "references": [
-    { "path": "../lsystem-generator" }
-  ]
+  "include": ["./src/**/*.ts"],
+  "references": [{ "path": "../lsystem-generator" }]
 }

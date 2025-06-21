@@ -3,12 +3,17 @@
   "private": true,
   "workspaces": [
     "lsystem-generator",
-    "tgfx"
+    "tgfx",
+    "webpage"
   ],
   "devDependencies": {
+    "prettier": "^3.5.3",
     "typescript": "^5.8.3"
   },
   "scripts": {
     "build": "tsc -b"
+  },
+  "dependencies": {
+    "@types/node": "^24.0.3"
   }
 }

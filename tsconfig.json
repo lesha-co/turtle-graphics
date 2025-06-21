@@ -1,6 +1,10 @@
 {
   "files": [],
-  "references": [{ "path": "./lsystem-generator" }, { "path": "./tgfx" }],
+  "references": [
+    { "path": "./lsystem-generator" },
+    { "path": "./tgfx" },
+    { "path": "./webpage" }
+  ],
   "compilerOptions": {
     "composite": true,
     "declaration": true,

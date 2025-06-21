@@ -1,4 +1,4 @@
-import { lsys } from "..";
+import { lsys } from "../dist/index.js";
 
 const sequence = lsys(
   "A",
@@ -6,9 +6,7 @@ const sequence = lsys(
     A: "A-B--B+A++AA+B-",
     B: "+A-BB--B-A++A+B",
   },
-  5
+  100,
 );
-for (let i of sequence) {
-  // do stuff
-  console.log(i);
-}
+
+console.log((process.memoryUsage.rss() / 1024 / 1024) | 0);

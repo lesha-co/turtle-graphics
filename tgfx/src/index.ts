@@ -1,4 +1,5 @@
-import {lsys} from 'lsystem-generator'
+import { lsys } from "lsystem-generator";
+export { coordinatesToSVGPath, render } from "./render.js";
 
 class Turtle {
   history: {
@@ -156,7 +157,6 @@ class Turtle {
     iterations: number,
     commands: Record<string, (t: Turtle) => Promise<void> | void>,
   ) {
-
     for (const instruction of lsys(initiator, expansionRules, iterations))
       await commands[instruction]?.(this);
   }

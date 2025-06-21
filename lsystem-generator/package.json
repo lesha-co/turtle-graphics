@@ -1,6 +1,7 @@
 {
   "name": "lsystem-generator",
   "version": "1.0.1",
+  "type": "module",
   "description": "a library that lets you create l-system expansions",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
